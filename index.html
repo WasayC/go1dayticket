@@ -62,7 +62,7 @@
      <div class="date">
         <div class="date__column">
           <div class="date__header">CURRENT TIME:</div>
-          <div class="date__value" id="date">December 7, 2024, 10:32:06 AM</div>
+          <div class="date__value" id="date">Dec 7, 2024, 10:32:06 AM</div>
         </div>
         <div class="date__column activated">
           <div class="date__header">TIME SINCE ACTIVATION:</div>
@@ -82,7 +82,7 @@
           const currentDate = new Date();
       
           // Formatting the date as "Month Day, Year"
-          const options = { year: 'numeric', month: 'long', day: 'numeric' };
+          const options = { year: 'numeric', month: 'short', day: 'numeric' };
           const formattedDate = currentDate.toLocaleDateString('en-US', options);
       
           // Get the time in "hh:mm:ss AM/PM" format
