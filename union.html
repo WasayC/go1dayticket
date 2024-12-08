@@ -83,13 +83,11 @@
       
           // Formatting the date as "Month Day, Year"
           const options = { year: 'numeric', month: 'short', day: 'numeric' };
-          const formattedDate = currentDate.toLocaleDateString('en-US', options);
-      
-          // Get the time in "hh:mm:ss AM/PM" format
-          const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-      
-          // Combine date and time
-          dateElement.textContent = `${formattedDate}, ${formattedTime}`;
+		const formattedDate = currentDate.toLocaleDateString('en-US', options).replace(',', ''); // Removes only the first comma
+		const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+		dateElement.textContent = `${formattedDate}, ${formattedTime}`; // Retains the second comma before the time
+
+
         }
       
         // Timer logic for "Time Since Activation"
