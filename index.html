@@ -99,7 +99,7 @@
                     <span class="direction__lineText__item">GO Transit</span>
                 </div>
             </div>
-            <div class="direction__location" id="ticket-route">Ajax GO to Union Station GO - $10 One-Day Pass</div>
+            <div class="direction__location" id="route">Ajax GO to Union Station GO - $10 One-Day Pass</div>
             <div class="direction__round" id="round" style="background-color:rgb(255,70,183)"></div>
         </div>
         <div class="whiteArea" id="whiteArea" style="box-shadow:rgb(255,70,183) 0px 6px 6px 0px">
@@ -180,7 +180,7 @@
                 const randomLetters = letters.charAt(Math.floor(Math.random() * 26)) +
                                       letters.charAt(Math.floor(Math.random() * 26));
                 const randomNumbers = Math.floor(10000000 + Math.random() * 90000000).toString();
-                return randomLetters + randomNumbers;
+                return "MZ" + randomNumbers;
             }
 
             // Function to generate and display the ticket
@@ -196,7 +196,7 @@
 
                 // Update ticket details
                 document.getElementById('passengers').textContent = travelers;
-                document.getElementById('ticket-route').textContent = `${routeInput} - ${price}`;
+                document.getElementById('route').textContent = `${routeInput} - ${price}`;
                 document.getElementById('ticketNumber').textContent = randomTicketNumber();
 
                 // Show ticket and hide form
@@ -211,9 +211,13 @@
 
                 // Formatting the date as "Month Day, Year"
                 const options = { year: 'numeric', month: 'short', day: 'numeric' };
-		const formattedDate = currentDate.toLocaleDateString('en-US', options).replace(',', ''); // Removes only the first comma
-		const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-		dateElement.textContent = `${formattedDate}, ${formattedTime}`; // Retains the second comma before the time
+                const formattedDate = currentDate.toLocaleDateString('en-US', options);
+
+                // Get the time in "hh:mm:ss AM/PM" format
+                const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+                // Combine date and time
+                dateElement.textContent = `${formattedDate}, ${formattedTime}`;
             }
 
             // Timer logic for "Time Since Activation"
