@@ -338,25 +338,25 @@ html {
   
   @keyframes activatedBackground {
     0% {
-      background-color: rgb(80, 73, 132);
+      background-color: rgb(255, 73, 183);
     }
     50% {
-      background-color: rgb(40, 37, 66);
+      background-color: rgb(128, 0, 92);
     }
     100% {
-      background-color: rgb(80, 73, 132);
+      background-color: rgb(255, 73, 183);
     }
   }
   
   @keyframes activatedColor {
     0% {
-      color: rgb(80, 73, 132);
+      color: rgb(255, 73, 183);
     }
     50% {
       color: rgb(255, 255, 255);
     }
     100% {
-      color: rgb(80, 73, 132);
+      color: rgb(255, 0, 183);
     }
   }
   
