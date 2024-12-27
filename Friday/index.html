@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no, initial-scale=0.8695, maximum-scale=0.8695, minimum-scale=0.8695, height=705">
+    <meta name="author" content="Mozio Inc.">
+    <meta name="description" content="">
+    <title>Ticket Generator</title>
+    <link rel="stylesheet" href="hi.css">
+    <style>
+        /* Additional styles for the input form */
+        #ticket-generator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 3;
+            width: 80%;
+            max-width: 400px;
+        }
+        #ticket-generator h1 {
+            margin-bottom: 20px;
+            color: #506384;
+            font-size: 1.5em;
+        }
+        #ticket-generator label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #404852;
+        }
+        #ticket-generator input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        #ticket-generator button {
+            width: 100%;
+            padding: 10px;
+            background-color: #506384;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #ticket-generator button:hover {
+            background-color: #3e5074;
+        }
+        /* Hide the ticket initially */
+        #ticket {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Ticket Generator Form -->
+    <div id="ticket-generator">
+        <h1>Travel Ticket Generator</h1>
+        <div>
+            <label for="travelers">Number of Travelers:</label>
+            <input type="number" id="travelers" min="1" value="1" required>
+        </div>
+        <div>
+            <label for="route">Where are you going:</label>
+            <input type="text" id="route" placeholder="e.g., Ajax GO to Union Station GO" required>
+        </div>
+        <div>
+            <label for="price">Price:</label>
+            <input type="text" id="price" placeholder="e.g., $10 One-Day Pass" required>
+        </div>
+        <button onclick="generateTicket()">Generate Ticket</button>
+    </div>
+
+    <!-- Original Ticket Display -->
+    <div class="warn warn--hidden sf-hidden" id="block-ticket">
+        <!-- Warning messages can go here -->
+    </div>
+    <div class="ticket ticket--activated ticket--pass" id="ticket" style="opacity:1">
+        <div class="direction" id="direction" style="background-color:rgb(69,123,150);border-color:rgb(69,123,150)">
+            <div class="direction__logoContainer">
+                <img src="logo.png" id="logo" class="direction__logo" alt="Logo"> <!-- direction__logo -->
+            </div>
+            <div class="direction__line">
+                <div class="direction__lineText">
+                    <span class="direction__lineText__item">GO Transit</span>
+                    <span class="direction__lineText__item">GO Transit</span>
+                    <span class="direction__lineText__item">GO Transit</span>
+                    <span class="direction__lineText__item">GO Transit</span>
+                    <span class="direction__lineText__item">GO Transit</span>
+                    <span class="direction__lineText__item">GO Transit</span>
+                </div>
+            </div>
+            <div class="direction__location" id="route">Ajax GO to Union Station GO - $10 One-Day Pass</div>
+            <div class="direction__round" id="round" style="background-color:rgb(69,123,150)"></div>
+        </div>
+        <div class="whiteArea" id="whiteArea" style="box-shadow:rgb(69,123,150) 0px 6px 6px 0px">
+            <div class="information">
+                <div class="information__block information__block--left">
+                    <div class="information__use information__count">
+                        x<span id="passengers">1</span>
+                    </div>
+                    <div class="information__text">
+                        Passenger(s)
+                        <span class="information__text_max sf-hidden"> Max</span>
+                    </div>
+                    <div class="information__types" id="ticket-types"><div>1x $10 One-Day Pass</div></div>
+                </div>
+                <div class="information__border">
+                    <img src="image.svg" class="information__trainIcon" alt="Train Icon"> <!-- information__trainIcon -->
+                </div>
+                <div class="information__block information__block--right">
+                    <div class="information__use information__use--arrow">
+                        <img src="data:," class="information__arrowIcon -isTicket sf-hidden" alt="Arrow Icon Ticket">
+                        <img src="image2.svg" class="information__arrowIcon -isPass" alt="Arrow Icon Pass"> <!-- information__arrowIcon -isPass -->
+                    </div>
+                    <div class="information__text">
+                        <span class="information__text_value -isTicket sf-hidden">One-Way</span>
+                        <span class="information__text_value -isPass">Multi Use Pass</span>
+                    </div>
+                </div>
+            </div>
+            <div class="whiteArea__border"></div>
+            <div class="number">
+                Ticket Number:
+                <div class="number__value" id="ticketNumber">FX41463872</div>
+            </div>
+            <div class="promo sf-hidden">PROMO CODE USED</div>
+            <div class="status">
+                <img src="image3.svg" class="status__icon" alt="Status Icon"> <!-- status__icon -->
+                <div class="status__text activated">Valid for travel</div>
+            </div>
+            <div class="date">
+                <div class="date__column">
+                    <div class="date__header">CURRENT TIME:</div>
+                    <div class="date__value" id="date">Dec 7, 2024, 10:32:06 AM</div>
+                </div>
+                <div class="date__column activated">
+                    <div class="date__header">TIME SINCE ACTIVATION:</div>
+                    <div class="date__value" id="date-active">02:00:00</div>
+                </div>
+            </div>
+        </div>
+        <div class="area area__default desktop sf-hidden">
+            <!-- Desktop specific content -->
+        </div>
+        <div class="area area__default default sf-hidden">
+            <!-- Default area content -->
+        </div>
+        <div class="area area__errored errored sf-hidden">
+            <!-- Errored area content -->
+        </div>
+        <div class="area area__activated any-activated">
+            <div class="area__space"></div>
+            <div class="area__activated__info">
+                <span class="area__fullyActiveInfo">Please show this screen to the proper authority on board the train.</span>
+            </div>
+            <div class="area__activated__timer" id="valid-time">23:43:03</div>
+        </div>
+        <div class="area area__expired expired sf-hidden">
+            <!-- Expired area content -->
+        </div>
+        <div class="overlay" id="overlay" style="display:none">
+            <!-- Overlay content -->
+        </div>
+
+        <!-- JavaScript for Ticket Generation and Timers -->
+        <script>
+            // Function to generate a random ticket number
+            function randomTicketNumber() {
+                const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const randomLetters = letters.charAt(Math.floor(Math.random() * 26)) +
+                                      letters.charAt(Math.floor(Math.random() * 26));
+                const randomNumbers = Math.floor(10000000 + Math.random() * 90000000).toString();
+                return "MZ" + randomNumbers;
+            }
+
+            // Function to generate and display the ticket
+            function generateTicket() {
+                const travelers = document.getElementById('travelers').value || 1;
+                const routeInput = document.getElementById('route').value.trim();
+                const price = document.getElementById('price').value.trim();
+
+                if (!routeInput || !price) {
+                    alert('Please fill out all fields.');
+                    return;
+                }
+
+                // Update ticket details
+                document.getElementById('passengers').textContent = travelers;
+                document.getElementById('route').textContent = `${routeInput} - ${price}`;
+                document.getElementById('ticketNumber').textContent = randomTicketNumber();
+
+                // Show ticket and hide form
+                document.getElementById('ticket-generator').style.display = 'none';
+                document.getElementById('ticket').style.display = 'block';
+            }
+
+            // Function to update the current time in the format "Month Day, Year, hh:mm:ss AM/PM"
+            function updateCurrentTime() {
+                const dateElement = document.getElementById("date");
+                const currentDate = new Date();
+
+                // Formatting the date as "Month Day, Year"
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                const formattedDate = currentDate.toLocaleDateString('en-US', options);
+
+                // Get the time in "hh:mm:ss AM/PM" format
+                const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+                // Combine date and time
+                dateElement.textContent = `${formattedDate}, ${formattedTime}`;
+            }
+
+            // Timer logic for "Time Since Activation"
+            let activationTime = 2 * 60 * 60; // Starting at 02:00:00 (in seconds)
+            let isActive = true;
+
+            function updateTimer() {
+                if (isActive) {
+                    activationTime++;
+                    if (activationTime >= 8 * 60 * 60) {
+                        // Reset after reaching 08:00:00
+                        activationTime = 2 * 60 * 60;
+                    }
+                }
+
+                // Convert time to HH:MM:SS format
+                const hours = Math.floor(activationTime / 3600);
+                const minutes = Math.floor((activationTime % 3600) / 60);
+                const seconds = activationTime % 60;
+                const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                const timerElement = document.getElementById("date-active");
+                timerElement.textContent = timeString;
+            }
+
+            // Function to update the valid-time timer
+            function updateValidTimeTimer(timeSinceActivationInSeconds) {
+                const totalSecondsInDay = 86400; // 24 hours in seconds
+                const remainingSeconds = totalSecondsInDay - timeSinceActivationInSeconds;
+
+                // Convert remaining seconds to hours, minutes, seconds
+                const hours = Math.floor(remainingSeconds / 3600);
+                const minutes = Math.floor((remainingSeconds % 3600) / 60);
+                const seconds = remainingSeconds % 60;
+
+                // Format the time as HH:MM:SS
+                const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+
+                // Update the HTML element with the remaining time
+                document.getElementById('valid-time').textContent = formattedTime;
+            }
+
+            // Helper function to ensure two digits for hours, minutes, and seconds
+            function padZero(num) {
+                return num < 10 ? `0${num}` : num;
+            }
+
+            // Example usage: Assuming time since activation is 2 hours (7200 seconds)
+            let timeSinceActivationInSeconds = 2 * 3600; // 2 hours in seconds
+
+            // Call updateTimer once to set the initial value
+            updateTimer();
+
+            // Update the current time and the activation timer every second
+            setInterval(updateCurrentTime, 1000);
+            setInterval(updateTimer, 1000);
+
+            // Initialize the valid-time timer
+            updateValidTimeTimer(timeSinceActivationInSeconds);
+
+            // Update the valid-time timer every second
+            setInterval(function() {
+                timeSinceActivationInSeconds++; // Increment by 1 second
+                updateValidTimeTimer(timeSinceActivationInSeconds); // Update the display
+            }, 1000); // 1000 milliseconds = 1 second
+        </script>
+</body>
+</html>
